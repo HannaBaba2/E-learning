@@ -5,7 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Cour;
 
 class User extends Authenticatable
 {
@@ -18,10 +21,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nom',
         'email',
         'password',
     ];
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,4 +50,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get cours from current cours
+     */
+
+    public function cours():HasMany{
+
+        return $this->hasMany(Cour::class);
+    }
+
+
+    /**
+     * Get assign cours
+     */
+
+     public function assign_cours(): BelongsToMany{
+
+            return $this->BelongsToMany(Cour::class,'inscription','cour_id','user_id')->using(Inscription::class);
+
+
+     }
 }
