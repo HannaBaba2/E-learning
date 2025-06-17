@@ -2,56 +2,47 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-
-    //
-
-
-    public function login(){
+    public function showLoginForm()
+    {
         return view('auth.login');
     }
-    /**
-     * Handle an authentication attempt.
-     */
-    public function authenticate(Request $request): RedirectResponse
+
+    public function login(Request $request)
     {
-        //On valide les données
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        // Vérifie si le user exist
- 
-        if (Auth::attempt($credentials)) {
-            //dump(Auth::attempt($credentials));
-            //dd(Auth::user());
+        $credentials = $request->only('email', 'password');
 
-            $request->session()->regenerate();
-            return redirect()->intended('cours');
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            if ($user->enseignant) {
+                return redirect()->route('enseignants.dashboard');
+            } 
+            elseif ($user->etudiant) {
+                return redirect()->route('etudiants.dashboard');
+            } 
+            else {
+                Auth::logout();
+                return redirect()->route('login')->withErrors(['email' => 'Aucun rôle associé à ce compte.']);
+            }
         }
- 
-        return back()->withErrors([
-            'email' => 'Les identifiants fournis ne correspondent à aucun compte enregistré.',
-        ])->onlyInput('email');
+
+        return redirect()->back()->withErrors(['email' => 'Email ou mot de passe incorrect.']);
     }
-    /**
-     * Log the user out of the application
-     */
-    public function logout(Request $request): RedirectResponse
+
+    public function logout()
     {
         Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/cours');
+        return redirect()->route('login');
     }
 }

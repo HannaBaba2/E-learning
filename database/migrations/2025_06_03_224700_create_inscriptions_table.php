@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->integer('etudiant_id');
             $table->integer('cour_id');
-            $table->foreign('etudiant_id')->references('etudiant_id')->on('etudiants')->cascadeOnDelete();
-            $table->foreign('cour_id')->references('cour_id')->on('cours')->cascadeOnDelete();
-            $table->string('paiement')->nullable();
+            $table->boolean('paiement')->default(false);
             $table->timestamps();
+            $table->foreign('cour_id')->references('cour_id')->on('cours')->cascadeOnDelete();
+            $table->foreign('etudiant_id')->references('etudiant_id')->on('etudiants')->cascadeOnDelete();
             $table->primary(['etudiant_id','cour_id']);
         });
     }

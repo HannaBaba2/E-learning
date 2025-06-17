@@ -16,25 +16,29 @@ class InscriptionSeeder extends Seeder
     public function run(): void
     {
         //
-        $etudiant_id = Etudiant::pluck('etudiant_id');
-        $cour_id = Cour::pluck('cour_id');
+        {
+        $etudiant1 = Etudiant::first();           
+        $etudiant2 = Etudiant::skip(1)->first();  
 
-        $inscriptions = [
-        [
-            'etudiant_id' => $etudiant_id->random(),
-            'cour_id' => $cour_id->random(),
-            'paiement' => 'payé',
-        ],
-        [
-            'etudiant_id' => $etudiant_id->random(),
-            'cour_id' => $cour_id->random(),
-            'paiement' => 'impayé',
-        ],
-        ];
+        $cours1 = Cour::first();                 
+        $cours2 = Cour::skip(1)->first();        
 
-        foreach ($inscriptions as $data) {
-            Inscription::create($data);
-        }
+        
+        Inscription::create([
+            'etudiant_id' => $etudiant1->etudiant_id,
+            'cour_id' => $cours1->cour_id,
+            'paiement' => false,
+        ]);
 
+     
+        Inscription::create([
+            'etudiant_id' => $etudiant2->etudiant_id,
+            'cour_id' => $cours2->cour_id,
+            'paiement' => true,
+        ]);
+
+        
     }
+}
+
 }

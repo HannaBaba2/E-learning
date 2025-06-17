@@ -33,18 +33,20 @@
                 <td>{{$cour->description}}</td>
                 <td>{{$cour->author}}</td>
                 <td>
-                    <a href="{{route('cours.show',$cour->cour_id)}}" class="btn btn-info btn-sm">Voir</a>
-                    <a href="{{route('cours.edit',$cour->cour_id)}}" class="btn btn-warning btn-sm">Modifier</a>
-                    <form action="{{route('cours.destroy',$cour->cour_id)}}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce cours ?')">Supprimer</button>
-                    </form>
+                    <div class="flex space-x-2">
+                        <a href="{{route('cours.show',$cour->cour_id)}}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="{{route('cours.edit',$cour->cour_id)}}" class="btn btn-warning btn-sm">Modifier</a>
+                        <form action="{{route('cours.destroy',$cour->cour_id)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce cours ?')">Supprimer</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @empty
                 <tr>
-                    <td>Oups ! no lesson.</td>
+                    <td>Oups ! no lessons.</td>
                 </tr>
             @endforelse
             <!-- Ajoutez d'autres lignes de cours ici -->

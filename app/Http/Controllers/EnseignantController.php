@@ -3,62 +3,109 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Enseignant;
+use App\Models\User; // Assurez-vous d'importer le modèle User
+use Illuminate\Support\Facades\Hash;
 
 class EnseignantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $enseignants = Enseignant::paginate(10);
+        return view('enseignants.index', compact('enseignants'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        return view('enseignants.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'dateNaissance' => 'required|date',
+            'telephone' => 'required|string|max:20',
+            'adresse' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'specialite' => 'nullable|string',
+        ]);
+
+        try {
+            $user = new User();
+            $user->nom = $request->input('nom');
+            $user->prenom = $request->input('prenom');
+            $user->dateNaissance = $request->input('dateNaissance');
+            $user->telephone = $request->input('telephone');
+            $user->adresse = $request->input('adresse');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+
+            $enseignant = new Enseignant();
+            $enseignant->user_id = $user->user_id; // Corrigez ici
+            $enseignant->specialite = $request->input('specialite');
+            $enseignant->save();
+
+            \Auth::login($user);
+
+            return redirect()->route('home')->with('success', 'Inscription réussie !');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de l\'inscription.']);
+       
+                }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Enseignant $enseignant)
     {
-        //
+        return view('enseignants.show', compact('enseignant'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Enseignant $enseignant)
     {
-        //
+        return view('enseignants.edit', compact('enseignant'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Enseignant $enseignant)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'dateNaissance' => 'required|date',
+            'telephone' => 'required|string|max:20',
+            'adresse' => 'required|string|max:255',
+            'specialite' => 'nullable|string',
+        ]);
+
+        try {
+            $user = $enseignant->user;
+            $user->nom = $request->input('nom');
+            $user->prenom = $request->input('prenom');
+            $user->dateNaissance = $request->input('dateNaissance');
+            $user->telephone = $request->input('telephone');
+            $user->adresse = $request->input('adresse');
+            $user->save();
+
+            // Mettre à jour la spécialité de l'enseignant
+            $enseignant->specialite = $request->input('specialite');
+            $enseignant->save();
+
+            return redirect()->route('enseignants.index')->with('success', 'Enseignant mis à jour avec succès.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de la mise à jour.']);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Enseignant $enseignant)
     {
-        //
+        try {
+            $enseignant->delete();
+            return redirect()->route('enseignants.index')->with('success', 'Enseignant supprimé avec succès !');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de la suppression.']);
+        }
     }
 }

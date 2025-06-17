@@ -16,15 +16,24 @@ class Etudiant extends Model
 
     protected $primaryKey = 'etudiant_id';
 
-    protected $fillable = ['nom', 'prenom','dateNaissance','telephone','adresse','email', 'mot_de_passe'];
+    protected $fillable = ['niveau','user_id'];
 
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
     public function inscriptions() {
         return $this->hasMany(Inscription::class);
     }
 
-    public function cours() {
-        return $this->belongsToMany(Cours::class, 'inscriptions');
-    }
+    // public function cours() {
+    //     return $this->belongsToMany(
+    //     Cour::class,
+    //     'inscriptions',         
+    //     'etudiant_id',         
+    //     'cour_id'               
+    // )->withPivot('paiement')->withTimestamps();
+    // }
 }
 

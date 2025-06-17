@@ -16,7 +16,12 @@ class Enseignant extends Model
 
     
 
-    protected $fillable = ['nom', 'prenom','dateNaissance','specialite','telephone','adresse','email', 'mot de passe'];
+    protected $fillable = ['specialite','user_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
 
     public function cours():HasMany{
         return $this->hasMany(Cour::class);

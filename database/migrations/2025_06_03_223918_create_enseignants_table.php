@@ -13,15 +13,9 @@ return new class extends Migration
     {
         Schema::create('enseignants', function (Blueprint $table) {
             $table->id('enseignant_id');
-            $table->string('nom');
-            $table->string('prenom');
-            $table->date('dateNaissance');
             $table->string('specialite');
-            $table->integer('telephone');
-            $table->string('adresse');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('mot de passe');
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

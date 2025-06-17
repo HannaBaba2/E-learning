@@ -38,13 +38,18 @@ class Cour extends Model
         return $this->hasMany(Inscription::class);
     }
 
-    public function etudiants() {
-        return $this->belongsToMany(Etudiant::class, 'inscriptions','etudiant_id','cour_id');
-    }
+    // public function etudiants() {
+    //     return $this->belongsToMany(
+    //     Etudiant::class,
+    //     'inscriptions',
+    //     'cour_id',
+    //     'etudiant_id'
+    // )->withPivot('paiement')->withTimestamps();
+    // }
 
 
-    public function assign_users(): BelongsToMany{
+    // public function assign_users(): BelongsToMany{
 
-        return $this->BelongsToMany(User::class,'inscriptions','cour_id','etudiant_id','user_id',)->using(Inscription::class);
-    }
+    //     return $this->BelongsToMany(User::class,'inscriptions','cour_id','etudiant_id','user_id',)->using(Inscription::class);
+    // }
 }
