@@ -25,10 +25,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'nom',
-        //'prenom',
-        //'dateNaissance',
-        //'telephone',
-        //'adresse',
+        'prenom',
+        'dateNaissance',
+        'telephone',
+        'adresse',
         'email',
         'password',
     ];
@@ -87,5 +87,9 @@ class User extends Authenticatable
 //         'cour_id'
 //     )->using(Inscription::class);
 // }
+    // Dans le modèle User.php
+    public function cours() {
+        return $this->hasMany(Cour::class, 'user_id'); // Assurez-vous que 'user_id' est la clé étrangère correcte
+    }
 
 }

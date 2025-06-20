@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <h2>Inscription Etudiant</h2>
-        <form border="1" action="{{ route('etudiants.store') }}" method="POST">
+        <form   action="{{ route('etudiants.store') }}" method="POST">
             @csrf
 
             <div class="form-group">

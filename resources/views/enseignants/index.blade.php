@@ -14,26 +14,29 @@
                 Ajouter Un Enseignant   
             </button>
         </a>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Date de Naissance</th>
-                    <th>Téléphone</th>
-                    <th>Email</th>
-                    <th>Spécialité</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($enseignants as $enseignant)
+        <div>
+            <table border="4">
+                <thead>
                     <tr>
-                        <td>{{ $enseignant->nom }}</td>
-                        <td>{{ $enseignant->prenom }}</td>
-                        <td>{{ $enseignant->dateNaissance}}</td>
-                        <td>{{ $enseignant->telephone }}</td>
-                        <td>{{ $enseignant->email }}</td>
+                        <th>Numéro</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Date de Naissance</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Spécialité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($enseignants as $enseignant)
+                    <tr>
+                        <td>{{ $loop->index+1 }}</td>
+                        <td>{{ $enseignant->user->nom }}</td>
+                        <td>{{ $enseignant->user->prenom }}</td>
+                        <td>{{ $enseignant->user->dateNaissance}}</td>
+                        <td>{{ $enseignant->user->telephone }}</td>
+                        <td>{{ $enseignant->user->email }}</td>
                         <td>{{ $enseignant->specialite }}</td>
                         <td>
                             <a href="{{ route('enseignants.show', $enseignant->enseignant_id) }}" class="btn btn-info btn-sm">Afficher</a>
@@ -45,9 +48,10 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="mt-5">
         {{$enseignants->links()}}        

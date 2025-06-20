@@ -11,13 +11,13 @@
         <div class="list-group">
             <a href="{{ route('cours.index') }}" class="list-group-item list-group-item-action">
                 Voir mes cours
-            </a>
+            </a></br>
             <a href="{{ route('etudiants.index') }}" class="list-group-item list-group-item-action">
                 Liste des étudiants
-            </a>
+            </a></br>
             <a href="{{ route('enseignants.index') }}" class="list-group-item list-group-item-action">
                 Enseignants
-            </a>
+            </a></br>
         </div>
     </div>
 

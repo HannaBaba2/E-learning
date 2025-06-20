@@ -8,48 +8,47 @@
 <body>
 <div class="container mt-4">
     <h1>Liste des cours</h1>
-    <a href="{{route('cours.create')}}" class="btn btn-primary mb-3">Ajouter un cours</a>
-
-    <!-- Message de succès (à afficher dynamiquement si besoin) -->
-    <!-- <div class="alert alert-success">Cours ajouté avec succès.</div> -->
-
-    <!-- Si aucun cours -->
-    <!-- <p>Aucun cours disponible.</p> -->
-
-    <!-- Exemple de table de cours -->
+    <a href="{{ route('cours.create') }}" class="">Ajouter un cours</a>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Titre</th>
                 <th>Description</th>
-                <th>Author</th>
+                <th>Auteur</th>
+                <th>Fichier</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($cours as $cour)
             <tr>
-                <td>{{$cour->titre}}</td>
-                <td>{{$cour->description}}</td>
-                <td>{{$cour->author}}</td>
+                <td>{{ $cour->titre }}</td>
+                <td>{{ $cour->description }}</td>
+                <td>{{ $cour->enseignant->user->nom ?? 'Inconnu' }}</td>
+                <td>
+                    @if($cour->fichier)
+                        <a href="{{ asset('storage/' . $cour->fichier) }}" class="btn btn-link">Télécharger</a>
+                    @else
+                        Pas de fichier disponible
+                    @endif
+                </td>
                 <td>
                     <div class="flex space-x-2">
-                        <a href="{{route('cours.show',$cour->cour_id)}}" class="btn btn-info btn-sm">Voir</a>
-                        <a href="{{route('cours.edit',$cour->cour_id)}}" class="btn btn-warning btn-sm">Modifier</a>
-                        <form action="{{route('cours.destroy',$cour->cour_id)}}" method="post">
+                        <a href="{{ route('cours.show', $cour->cour_id) }}" class="">Voir</a>
+                        <a href="{{ route('cours.edit', $cour->cour_id) }}" class="">Modifier</a>
+                        <form action="{{ route('cours.destroy', $cour->cour_id) }}" method="post" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce cours ?')">Supprimer</button>
+                            <button type="submit" class="" onclick="return confirm('Supprimer ce cours ?')">Supprimer</button>
                         </form>
                     </div>
                 </td>
             </tr>
             @empty
                 <tr>
-                    <td>Oups ! no lessons.</td>
+                    <td colspan="5">Oups ! Aucun cours disponible.</td>
                 </tr>
             @endforelse
-            <!-- Ajoutez d'autres lignes de cours ici -->
         </tbody>
     </table>
 

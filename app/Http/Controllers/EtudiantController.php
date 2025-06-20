@@ -11,7 +11,7 @@ class EtudiantController extends Controller
 {
     public function index()
     {
-        $etudiants = Etudiant::paginate(10);
+        $etudiants = Etudiant::with('user')->paginate(10);
         return view('etudiants.index', compact('etudiants'));
     }
 
@@ -28,30 +28,32 @@ class EtudiantController extends Controller
             'dateNaissance' => 'required|date',
             'telephone' => 'required|string|max:20',
             'adresse' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'niveau' => 'required|string',
+            'niveau' => 'required|string|max:255',
         ]);
 
         try {
             $user = new User();
-            $user->nom = $request->input('nom');
-            $user->prenom = $request->input('prenom');
-            $user->dateNaissance = $request->input('dateNaissance');
-            $user->telephone = $request->input('telephone');
-            $user->adresse = $request->input('adresse');
-            $user->email = $request->input('email');
-            $user->password = Hash::make($request->input('password'));
-            $user->save();
+                $user->nom = $request->input('nom');
+                $user->prenom = $request->input('prenom');
+                $user->dateNaissance = $request->input('dateNaissance');
+                $user->telephone = $request->input('telephone');
+                $user->adresse = $request->input('adresse');
+                $user->email = $request->input('email');
+                $user->password = Hash::make($request->input('password'));
+                $user->save();
 
             $etudiant = new Etudiant();
-            $etudiant->user_id = $user->id;
+            $etudiant->user_id = $user->user_id; 
             $etudiant->niveau = $request->input('niveau');
             $etudiant->save();
 
-            return redirect()->route('etudiants.index')->with('success', 'Étudiant créé avec succès !');
+            \Auth::login($user);
+
+            return redirect()->route('login')->with('success', 'Étudiant créé avec succès !');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Une erreur est survenue lors de l\'inscription.']);
+            return back()->withErrors(['error' => 'Erreur lors de l\'inscription . ']);
         }
     }
 
@@ -65,7 +67,7 @@ class EtudiantController extends Controller
         return view('etudiants.edit', compact('etudiant'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,Etudiant $etudiant)
     {
         $request->validate([
             'nom' => 'required|string|max:255',
@@ -73,48 +75,47 @@ class EtudiantController extends Controller
             'dateNaissance' => 'required|date',
             'telephone' => 'required|string|max:20',
             'adresse' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'niveau' => 'required|string',
+            'email'=>'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
+            'niveau' => 'required|string|max:255',
         ]);
 
         try {
-            $etudiant = Etudiant::with('user')->findOrFail($id);
             $user = $etudiant->user;
-
             $user->nom = $request->input('nom');
             $user->prenom = $request->input('prenom');
             $user->dateNaissance = $request->input('dateNaissance');
             $user->telephone = $request->input('telephone');
             $user->adresse = $request->input('adresse');
-            $user->email = $request->input('email');
+            $user->email=$request->input('email');
+            $user->password=$request->input('password');
 
-            if ($request->input('password')) {
-                $user->password = Hash::make($request->input('password'));
-            }
 
             $user->save();
 
             $etudiant->niveau = $request->input('niveau');
             $etudiant->save();
 
-            return redirect()->route('etudiants.index')->with('success', 'Étudiant mis à jour avec succès !');
+            return redirect()->route('etudiants.index')->with('success', 'Etudiant mis à jour avec succès.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Une erreur est survenue lors de la mise à jour.']);
         }
     }
 
-    public function destroy($id)
+    public function destroy(Etudiant $etudiant)
     {
         try {
-            $etudiant = Etudiant::with('user')->findOrFail($id);
-            $user = $etudiant->user;
-
             $etudiant->delete();
-            $user->delete();
-
-            return redirect()->route('etudiants.index')->with('success', 'Étudiant supprimé avec succès !');
+            return redirect()->route('etudiants.index')->with('success', 'Etudiant supprimé avec succès !');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Une erreur est survenue lors de la suppression.']);
         }
+    }
+
+    public function dashboard()
+    {
+        $etudiant = auth()->user()->etudiant;
+        $coursInscrits = $etudiant->cour ?? [];
+        return view('etudiants.dashboard', compact('coursInscrits'));
     }
 }

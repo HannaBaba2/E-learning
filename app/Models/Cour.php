@@ -25,31 +25,36 @@ class Cour extends Model
     // }
 
 
-    public function user():BelongsTo{
+    // public function user():BelongsTo{
 
-        return $this->belongsTo(User::class,'user_id');
-     }
+    //     return $this->belongsTo(User::class,'user_id');
+    //  }
 
     public function enseignant() {
-        return $this->belongsTo(Enseignant::class);
+        return $this->belongsTo(Enseignant::class,'enseignant_id');
     }
 
     public function inscriptions() {
         return $this->hasMany(Inscription::class);
     }
 
-    // public function etudiants() {
-    //     return $this->belongsToMany(
-    //     Etudiant::class,
-    //     'inscriptions',
-    //     'cour_id',
-    //     'etudiant_id'
-    // )->withPivot('paiement')->withTimestamps();
-    // }
+    public function etudiants() {
+        return $this->belongsToMany(
+        Etudiant::class,
+        'inscriptions',
+        'cour_id',
+        'etudiant_id'
+    )->withPivot('paiement')->withTimestamps();
+    }
 
 
     // public function assign_users(): BelongsToMany{
 
     //     return $this->BelongsToMany(User::class,'inscriptions','cour_id','etudiant_id','user_id',)->using(Inscription::class);
     // }
+
+    // public function author() {
+    //     return $this->belongsTo(User::class, 'user_id'); // Assurez-vous que 'user_id' est la clé étrangère correcte
+    // }
+
 }
