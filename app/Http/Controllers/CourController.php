@@ -22,40 +22,35 @@ class CourController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        //
-        return view('cours.create',[
-            'enseignants'=>Enseignant::all(),
-        ]);
-    }
+{
+    $enseignants = Enseignant::all();
+    return view('cours.create', compact('enseignants'));
+}
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-        $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string',
-            'enseignant_id' => 'required|exists:enseignants,id',
-        ]);
+ public function store(Request $request)
+{
 
-        $cour = new Cour();
-        $cour->titre = $request->titre;
-        $cour->description = $request->description;
-        $cour->enseignant_id = $request->enseignant_id;
-        $cour->save();
+    $validated = $request->validate([
+        'titre' => 'required|string|max:255',
+        'description' => 'required|string',
+        'enseignant_id' => 'required|exists:enseignants,enseignant_id',
+    ]);
 
-        return redirect()->route('cours.index')->with('success', 'Cours créé avec succès.');
-    }
+    $cour = Cour::create($validated);
+
+    return redirect()->route('cours.index')->with('success', 'Cours créé avec succès.');
+}
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        // 
         
         return view('cours.show');
     }
@@ -63,26 +58,32 @@ class CourController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-        $courId = Cour::pluck('cour_id')->random();
-        $cour = Cour::find($courId);
-        $enseignants = Enseignant::all();
-        return view('cours.edit', [
-            'cour' => $cour,
-            'enseignants' => $enseignants,
-        ]);
-    }
+   public function edit($id)
+{
+    $cour = Cour::findOrFail($id);
+    $enseignants = Enseignant::all();
+    return view('cours.edit', compact('cour', 'enseignants'));
+}
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-        
-    }
+    public function update(Request $request, $id)
+{
+    $validated = $request->validate([
+        'titre' => 'required|string|max:255',
+        'description' => 'required|string',
+        'enseignant_id' => 'required|exists:enseignants,enseignant_id',
+    ]);
+
+    $cour = Cour::findOrFail($id);
+
+    $cour->update($validated);
+
+    return redirect()->route('cours.index')->with('success', 'Cours mis à jour avec succès.');
+}
+
 
     /**
      * Remove the specified resource from storage.

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('fichier')->nullable();
             $table->integer('enseignant_id');
-            $table->foreign('enseignant_id')->references('enseignant_id')->on('enseignants')->cascadeOnDelete;
+            $table->foreign('enseignant_id')->references('enseignant_id')->on('enseignants')->cascadeOnDelete();
             $table->timestamps();
         });
     }
