@@ -30,7 +30,7 @@
 
             <div class="form-group">
                 <label for="dateNaissance">Date de Naissance</label>
-                <input type="date" class="form-control" id="dateNaissance" name="dateNaissance" value="{{ old('dateNaissance', $enseignant->dateNaissance->format('Y-m-d')) }}" required>
+                <input type="date" class="form-control" id="dateNaissance" name="dateNaissance" value="{{ old('dateNaissance', $enseignant->dateNaissance)}}" required>
                 @error('dateNaissance')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -38,7 +38,7 @@
 
             <div class="form-group">
                 <label for="telephone">Téléphone</label>
-                <input type="text" class="form-control" id="telephone" name="telephone" value="{{ old('telephone', $enseignant->telephone) }}" required>
+                <input type="tel" class="form-control" id="telephone" name="telephone" value="{{ old('telephone', $enseignant->telephone) }}" required>
                 @error('telephone')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -61,7 +61,7 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Mot de passe (laisser vide pour ne pas changer)</label>
+                <label for="password">Mot de passe </label>
                 <input type="password" class="form-control" id="password" name="password">
                 @error('password')
                     <div class="text-danger">{{ $message }}</div>

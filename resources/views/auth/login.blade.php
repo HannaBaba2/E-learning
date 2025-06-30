@@ -30,6 +30,16 @@
             </div>
         </div>
         <button>Login</button>
+        <!-- <div class="mtn-3 flex flex-row-reverse">
+            <a href="{{route('etudiants.create')}}">
+                Create un Compte Etudiant
+            </a>
+        </div>
+        <div class="mtn-3 flex flex-row-reverse">
+            <a href="{{route('enseignants.create')}}">
+                Create un Compte Enseignant
+            </a>
+        </div> -->
     </form> 
 </body>
 </html>

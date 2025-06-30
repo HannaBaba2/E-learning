@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <h2>Modifier les Informations de l'Enseignant</h2>
-        <form action="{{ route('enseignants.update', $enseignant->id) }}" method="POST">
+        <form action="{{ route('enseignants.update', $enseignant->enseignant_id) }}" method="POST">
             @csrf
             @method('PUT')
 

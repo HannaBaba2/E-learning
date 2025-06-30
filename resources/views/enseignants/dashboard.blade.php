@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Tableau de bord Étudiant</h2>
+        <h2>Tableau de bord Enseignant</h2>
         <div class="list-group">
             <a href="{{ route('cours.create') }}" class="list-group-item list-group-item-action">
                 Cree Un Cour

@@ -16,6 +16,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+
 // Routes pour les étudiants
 Route::prefix('etudiants')->group(function () {
     Route::get('/', [EtudiantController::class, 'index'])->name('etudiants.index');
@@ -45,14 +46,14 @@ Route::prefix('enseignants')->group(function () {
 
     // Routes pour le tableau de bord de l'étudiant
     Route::get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiants.dashboard');
-    Route::post('/etudiant/cours/{id}/inscrire', [EtudiantController::class, 'inscrire'])->name('etudiants.cours.inscrire');
+    Route::post('/etudiant/cours/{cour}/inscrire', [EtudiantController::class, 'inscrire'])->name('etudiants.cours.inscrire');
 
     // Routes pour les cours
     Route::get('/cours', [CourController::class, 'index'])->name('cours.index');
     Route::get('/cours/create', [CourController::class, 'create'])->name('cours.create');
     Route::post('/cours', [CourController::class, 'store'])->name('cours.store');
-    Route::get('/cours/{id}', [CourController::class, 'show'])->name('cours.show'); // Afficher un cours
-    Route::get('/cours/{id}/edit', [CourController::class, 'edit'])->name('cours.edit'); // Modifier un cours
-    Route::put('/cours/{id}', [CourController::class, 'update'])->name('cours.update'); // Mettre à jour un cours
-    Route::delete('/cours/{id}', [CourController::class, 'destroy'])->name('cours.destroy'); // Supprimer un cours
+    Route::get('/cours/{cour}', [CourController::class, 'show'])->name('cours.show'); // Afficher un cours
+    Route::get('/cours/{cour}/edit', [CourController::class, 'edit'])->name('cours.edit'); // Modifier un cours
+    Route::put('/cours/{cour}', [CourController::class, 'update'])->name('cours.update'); // Mettre à jour un cours
+    Route::delete('/cours/{cour}', [CourController::class, 'destroy'])->name('cours.destroy'); // Supprimer un cours
 });

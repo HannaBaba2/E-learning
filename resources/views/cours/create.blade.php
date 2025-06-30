@@ -27,13 +27,18 @@
                 @enderror
             </div>
 
-            <!-- <div class="mb-3">
-                <label for="categorie" class="form-label">Catégorie</label>
-                <input type="text" class="form-control" id="categorie" name="categorie" value="{{ old('categorie') }}" required>
-                @error('categorie')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div> -->
+            <!-- <div class="form-group">
+                <label for="enseignant_id">Enseignant</label>
+                <select name="enseignant_id" id="enseignant_id" class="form-control" required>
+                    <option value="">-- Choisir un enseignant --</option>
+                    @foreach($enseignants as $enseignant)
+                        <option value="{{ $enseignant->enseignant_id }}" {{ old('enseignant_id') == $enseignant->enseignant_id ? 'selected' : '' }}>
+        {{ $enseignant->nom }}
+        </option>
+
+                    @endforeach
+                </select>
+        </div> -->
 
             <div class="mb-3">
                 <label for="fichier" class="form-label">Fichier du cours (PDF, vidéo, etc.)</label>

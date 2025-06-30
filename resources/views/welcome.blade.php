@@ -9,9 +9,16 @@
     <div class="container">
         <h1>Bienvenue sur notre plateforme E-learning</h1>
         <a href="{{ route('login') }}" class="btn btn-primary">Se connecter</a>
-        <p>S'inscrire En tant Qu'</p>
-        <a href="{{ route('etudiants.create') }}" class="btn btn-secondary">Étudiants</a>
-        <a href="{{ route('enseignants.create') }}" class="btn btn-secondary">Enseignants</a>
-        <br><br>
+        <!-- <br><br> -->
+        <p>
+
+            S'inscrire :
+            <!-- <br><br> -->
+            <a href="{{ route('etudiants.create') }}" class="btn btn-secondary">Étudiants</a>
+            <a href="{{ route('enseignants.create') }}" class="btn btn-secondary">Enseignants</a>
+            
+        </p>
+        
+        
     </div>
 </body

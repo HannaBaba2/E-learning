@@ -24,6 +24,6 @@ class Enseignant extends Model
     }
 
     public function cours():HasMany{
-        return $this->hasMany(Cour::class,'enseignant_id');
+        return $this->hasMany(Cour::class,'enseignant_id','enseignant_id');
     }
 }

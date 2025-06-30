@@ -13,9 +13,9 @@
         <thead>
             <tr>
                 <th>Titre</th>
-                <th>Description</th>
+                <!-- <th>Description</th> -->
                 <th>Auteur</th>
-                <th>Fichier</th>
+                <!-- <th>Fichier</th> -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,19 +23,20 @@
             @forelse ($cours as $cour)
             <tr>
                 <td>{{ $cour->titre }}</td>
-                <td>{{ $cour->description }}</td>
-                <td>{{ $cour->enseignant->user->nom ?? 'Inconnu' }}</td>
-                <td>
+                <!-- <td>{{ $cour->description }}</td> -->
+               <td>{{ $cour->enseignant->user->nom ?? 'Inconnu' }}</td>
+                <!-- <td>
                     @if($cour->fichier)
-                        <a href="{{ asset('storage/' . $cour->fichier) }}" class="btn btn-link">Télécharger</a>
+                    <a href="{{ asset('storage/' . $cour->fichier) }}" class="btn btn-link">Télécharger</a> 
                     @else
                         Pas de fichier disponible
-                    @endif
-                </td>
+                    @endif -->
+                </td> 
                 <td>
                     <div class="flex space-x-2">
-                        <a href="{{ route('cours.show', $cour->cour_id) }}" class="">Voir</a>
-                        <a href="{{ route('cours.edit', $cour->cour_id) }}" class="">Modifier</a>
+                        <button><a href="{{ route('cours.show', $cour->cour_id) }}" class="">Suivre Un Cours</a></button>
+                        <button><a href="{{ route('cours.edit', $cour->cour_id) }}" class="">Modifier</a></button>
+                        
                         <form action="{{ route('cours.destroy', $cour->cour_id) }}" method="post" style="display:inline;">
                             @csrf
                             @method('DELETE')

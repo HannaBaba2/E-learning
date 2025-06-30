@@ -35,7 +35,7 @@ class CourController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'fichier' => 'required|file|mimes:pdf,doc,docx',
+            'fichier' => 'required|file|mimes:pdf,doc,docx,png,jpeg',
         ]);
 
         try {
@@ -47,7 +47,7 @@ class CourController extends Controller
                 $cours->fichier = $request->file('fichier')->store('cours');
             }
 
-            $cours->enseignant_id = auth()->user()->enseignant->enseignant_id; // Assurez-vous que l'enseignant est connecté
+            $cours->enseignant_id = auth()->user()->enseignant->enseignant_id;
             $cours->save();
 
             return redirect()->route('cours.index')->with('success', 'Cours ajouté avec succès !');
@@ -59,18 +59,18 @@ class CourController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Cour $cour)
     {
-        $cour = Cour::with('enseignant')->findOrFail($id);
+        $cour->load('enseignant');
         return view('cours.show', compact('cour'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Cour $cour)
     {
-        $cour = Cour::with('enseignant')->findOrFail($id);
+        $cour->load('enseignant');
         $enseignants = Enseignant::all();
         return view('cours.edit', compact('cour', 'enseignants'));
     }
@@ -78,7 +78,7 @@ class CourController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cour $cour)
     {
         $request->validate([
             'titre' => 'required|string|max:255',
@@ -87,19 +87,17 @@ class CourController extends Controller
         ]);
 
         try {
-            $cours = Cour::findOrFail($id);
-            $cours->titre = $request->input('titre');
-            $cours->description = $request->input('description');
+            $cour->titre = $request->input('titre');
+            $cour->description = $request->input('description');
 
             if ($request->hasFile('fichier')) {
-                // Supprimer l'ancien fichier si nécessaire
-                if ($cours->fichier) {
-                    Storage::delete($cours->fichier);
+                if ($cour->fichier) {
+                    Storage::delete($cour->fichier);
                 }
-                $cours->fichier = $request->file('fichier')->store('cours');
+                $cour->fichier = $request->file('fichier')->store('cours');
             }
 
-            $cours->save();
+            $cour->save();
 
             return redirect()->route('cours.index')->with('success', 'Cours mis à jour avec succès !');
         } catch (\Exception $e) {
@@ -110,15 +108,14 @@ class CourController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    
+    public function destroy(Cour $cour)
     {
         try {
-            $cours = Cour::findOrFail($id);
-            // Supprimer le fichier associé si nécessaire
-            if ($cours->fichier) {
-                Storage::delete($cours->fichier);
+            if ($cour->fichier) {
+                Storage::delete($cour->fichier);
             }
-            $cours->delete();
+            $cour->delete();
 
             return redirect()->route('cours.index')->with('success', 'Cours supprimé avec succès !');
         } catch (\Exception $e) {
@@ -127,17 +124,13 @@ class CourController extends Controller
     }
 
     /**
- * Display the dashboard for the authenticated teacher.
- */
+     * Display the dashboard for the authenticated teacher.
+     */
     public function dashboard()
     {
-        // Récupérer l'enseignant connecté
         $enseignant = auth()->user()->enseignant;
-
-        // Récupérer les cours associés à cet enseignant
-        $cours = $enseignant->enseignant_id; // Assurez-vous que la relation 'cours' est définie dans le modèle Enseignant
+        $cours = $enseignant->cours;
 
         return view('cours.dashboard', compact('cours'));
     }
-
 }
